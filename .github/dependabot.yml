@@ -16,3 +16,12 @@ updates:
     groups:
       minor-and-patch:
         update-types: ["minor", "patch"]
+    ignore:
+      # The type package must match the minimum VS Code version in engines.vscode.
+      - dependency-name: "@types/vscode"
+      # The extension host of the minimum VS Code version runs Node 22.
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
+      # The lint tooling supports TypeScript below 6.1 only. A major is a manual decision.
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]

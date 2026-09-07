@@ -11,5 +11,3 @@
 ### Miscellaneous Chores
 
 * use a display name that is free on the Marketplace ([907ee9e](https://github.com/iOSonntag/vscode-bonsai/commit/907ee9e2bda92ac59478de6ad82f4951e369c027))
-
-## Changelog
