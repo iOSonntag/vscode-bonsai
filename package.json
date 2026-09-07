@@ -1,6 +1,6 @@
 {
   "name": "vscode-bonsai",
-  "displayName": "Bonsai",
+  "displayName": "Bonsai - Focus on your files",
   "description": "Focus on your task. Bonsai hides the files and folders that your current task does not need.",
   "version": "0.0.0",
   "publisher": "iOSonntag",
