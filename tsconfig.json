@@ -1,0 +1,40 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "lib": [
+      "ES2022"
+    ],
+    "types": [
+      "node"
+    ],
+    "strict": true,
+    "noImplicitOverride": true,
+    "noUncheckedIndexedAccess": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "exactOptionalPropertyTypes": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "sourceMap": true,
+    "rootDir": "."
+  },
+  "include": [
+    "src",
+    "test",
+    "esbuild.config.mjs",
+    "eslint.config.mjs",
+    "vitest.config.mts",
+    ".vscode-test.mjs"
+  ],
+  "exclude": [
+    "test/fixtures",
+    "node_modules",
+    "dist",
+    ".vscode-test"
+  ]
+}

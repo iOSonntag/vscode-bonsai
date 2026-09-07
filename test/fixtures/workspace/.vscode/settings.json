@@ -1,0 +1,6 @@
+{
+  "bonsai.git.cleanFilter": "never",
+  "files.exclude": {
+    "**/.git": true
+  }
+}

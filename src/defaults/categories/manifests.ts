@@ -1,0 +1,33 @@
+import { type DefaultCategory } from '../defaultDefinitions.js';
+
+export const manifestsCategory: DefaultCategory = {
+  id: 'manifests',
+  label: 'Package manifests',
+  patterns: [
+    '**/package.json',
+    '**/deno.json',
+    '**/deno.jsonc',
+    '**/jsr.json',
+    '**/pyproject.toml',
+    '**/setup.py',
+    '**/setup.cfg',
+    '**/requirements*.txt',
+    '**/Cargo.toml',
+    '**/go.mod',
+    '**/pubspec.yaml',
+    '**/Gemfile',
+    '**/*.gemspec',
+    '**/composer.json',
+    '**/pom.xml',
+    '**/build.gradle*',
+    '**/settings.gradle*',
+    '**/*.csproj',
+    '**/*.fsproj',
+    '**/*.vbproj',
+    '**/*.sln',
+    '**/mix.exs',
+    '**/Package.swift',
+    '**/Podfile',
+    '**/*.podspec',
+  ],
+};

@@ -1,0 +1,15 @@
+export const commandIds = {
+  selectFilter: 'bonsai.selectFilter',
+  cycleFilter: 'bonsai.cycleFilter',
+  applyFilter: 'bonsai.applyFilter',
+  applyAllFilter: 'bonsai.filter.all',
+  applyCodingFilter: 'bonsai.filter.coding',
+  applySetupFilter: 'bonsai.filter.setup',
+  applyAiFilter: 'bonsai.filter.ai',
+  refresh: 'bonsai.refresh',
+  clearGeneratedKeys: 'bonsai.clearGeneratedKeys',
+  installGitCleanFilter: 'bonsai.git.installCleanFilter',
+  checkGitCleanFilter: 'bonsai.git.checkCleanFilter',
+  uninstallGitCleanFilter: 'bonsai.git.uninstallCleanFilter',
+  showOutput: 'bonsai.showOutput',
+} as const;

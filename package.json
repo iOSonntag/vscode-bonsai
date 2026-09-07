@@ -1,0 +1,280 @@
+{
+  "name": "vscode-bonsai",
+  "displayName": "Bonsai",
+  "description": "Focus on your task. Bonsai hides the files and folders that your current task does not need.",
+  "version": "0.0.0",
+  "publisher": "iOSonntag",
+  "license": "MIT",
+  "icon": "media/icon.png",
+  "galleryBanner": {
+    "color": "#23565C",
+    "theme": "dark"
+  },
+  "type": "module",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iOSonntag/vscode-bonsai"
+  },
+  "engines": {
+    "vscode": "^1.100.0",
+    "node": ">=22"
+  },
+  "packageManager": "pnpm@11.25.0",
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "explorer",
+    "filter",
+    "focus",
+    "hide files",
+    "files.exclude"
+  ],
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "extensionKind": [
+    "workspace"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "bonsai.selectFilter",
+        "title": "Select Filter",
+        "category": "Bonsai",
+        "icon": "$(filter)"
+      },
+      {
+        "command": "bonsai.cycleFilter",
+        "title": "Cycle Filter",
+        "category": "Bonsai"
+      },
+      {
+        "command": "bonsai.applyFilter",
+        "title": "Apply Filter by Id",
+        "category": "Bonsai"
+      },
+      {
+        "command": "bonsai.filter.all",
+        "title": "Show All",
+        "category": "Bonsai"
+      },
+      {
+        "command": "bonsai.filter.coding",
+        "title": "Coding Filter",
+        "category": "Bonsai"
+      },
+      {
+        "command": "bonsai.filter.setup",
+        "title": "Project Setup Filter",
+        "category": "Bonsai"
+      },
+      {
+        "command": "bonsai.filter.ai",
+        "title": "AI Filter",
+        "category": "Bonsai"
+      },
+      {
+        "command": "bonsai.refresh",
+        "title": "Refresh Filter",
+        "category": "Bonsai"
+      },
+      {
+        "command": "bonsai.clearGeneratedKeys",
+        "title": "Clear Generated Exclude Keys",
+        "category": "Bonsai"
+      },
+      {
+        "command": "bonsai.git.installCleanFilter",
+        "title": "Git: Set Up Clean Filter",
+        "category": "Bonsai"
+      },
+      {
+        "command": "bonsai.git.checkCleanFilter",
+        "title": "Git: Check Clean Filter",
+        "category": "Bonsai"
+      },
+      {
+        "command": "bonsai.git.uninstallCleanFilter",
+        "title": "Git: Remove Clean Filter",
+        "category": "Bonsai"
+      },
+      {
+        "command": "bonsai.showOutput",
+        "title": "Show Output",
+        "category": "Bonsai"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "bonsai.selectFilter",
+          "when": "view == workbench.explorer.fileView",
+          "group": "navigation@9"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "bonsai.applyFilter",
+          "when": "false"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Bonsai",
+      "properties": {
+        "bonsai.filters": {
+          "type": "object",
+          "scope": "resource",
+          "default": {},
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "label": {
+                "type": "string",
+                "description": "The name shown on the button and in the picker."
+              },
+              "base": {
+                "type": "string",
+                "enum": [
+                  "showAll",
+                  "hideAll"
+                ],
+                "enumDescriptions": [
+                  "Everything is visible. Hide rules run first, show rules run last.",
+                  "Everything is hidden. Show rules run first, hide rules run last."
+                ]
+              },
+              "extends": {
+                "type": "string",
+                "description": "The id of a filter to start from. The lists of this filter add to the parent's lists."
+              },
+              "enabled": {
+                "type": "boolean",
+                "default": true,
+                "description": "Set to false to remove the filter from the buttons and the picker."
+              },
+              "hide": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "default": [],
+                "markdownDescription": "Entries to hide. An entry is a glob, `category:<id>`, or `!` followed by either to remove an inherited entry."
+              },
+              "show": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "default": [],
+                "markdownDescription": "Entries to show. An entry is a glob, `category:<id>`, or `!` followed by either to remove an inherited entry."
+              }
+            }
+          },
+          "markdownDescription": "Filters, keyed by id. A built-in filter (`coding`, `setup`, `ai`) can be extended here. Lists add up across user, workspace, and folder settings."
+        },
+        "bonsai.categories": {
+          "type": "object",
+          "scope": "resource",
+          "default": {},
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "label": {
+                "type": "string"
+              },
+              "patterns": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "default": [],
+                "markdownDescription": "Globs in the VS Code `files.exclude` dialect, `category:<id>` references, or `!` removals."
+              }
+            }
+          },
+          "markdownDescription": "Categories, keyed by id. A category says what a file is, for example `lint` or `ci`. Patterns add to the built-in category of the same id."
+        },
+        "bonsai.leafFolders": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "scope": "resource",
+          "markdownDescription": "Folder name globs that the walk never opens, for example `node_modules` or `bazel-*`. Entries add to the built-in list. Use `!name` to remove a built-in entry."
+        },
+        "bonsai.coding.hidePackageManifests": {
+          "type": "boolean",
+          "scope": "resource",
+          "default": false,
+          "description": "Hide package manifests such as package.json and pyproject.toml in the Coding filter."
+        },
+        "bonsai.git.cleanFilter": {
+          "type": "string",
+          "scope": "resource",
+          "enum": [
+            "ask",
+            "always",
+            "never"
+          ],
+          "default": "ask",
+          "enumDescriptions": [
+            "Ask once per repository before Bonsai installs the local Git clean filter.",
+            "Install the local Git clean filter without a prompt.",
+            "Never touch the Git configuration."
+          ],
+          "description": "Whether Bonsai installs a local Git clean filter that keeps the generated keys out of commits."
+        },
+        "bonsai.statusBar.enabled": {
+          "type": "boolean",
+          "scope": "window",
+          "default": true,
+          "description": "Show the active filter in the status bar."
+        },
+        "bonsai.maxWalkEntries": {
+          "type": "integer",
+          "scope": "resource",
+          "default": 50000,
+          "minimum": 1000,
+          "description": "The number of directory entries the walk reads per workspace folder before it stops and applies a partial result."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "node esbuild.config.mjs",
+    "watch": "node esbuild.config.mjs --watch",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "check": "pnpm run typecheck && pnpm run lint",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:integration": "pnpm run build && vscode-test",
+    "package": "pnpm run check && pnpm run test && pnpm run build && vsce package --no-dependencies",
+    "vscode:prepublish": "pnpm run build"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@stylistic/eslint-plugin": "5.10.0",
+    "@types/node": "22.20.1",
+    "@types/vscode": "1.100.0",
+    "@vscode/test-cli": "0.0.15",
+    "@vscode/test-electron": "3.1.0",
+    "@vscode/vsce": "3.9.2",
+    "esbuild": "0.28.2",
+    "eslint": "10.10.0",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.69.0",
+    "vitest": "5.0.0"
+  },
+  "dependencies": {
+    "jsonc-parser": "3.3.1",
+    "zod": "4.5.4"
+  }
+}
