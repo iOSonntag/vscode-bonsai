@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/iOSonntag/vscode-bonsai/compare/v1.0.1...v1.1.0) (2026-09-07)
+
+
+### Features
+
+* add the "Coding excluding tests" filter and hide the .sst folder ([362f848](https://github.com/iOSonntag/vscode-bonsai/commit/362f848bab05dd000c83bb5afe8ffe003f27588d))
+
 ## [1.0.1](https://github.com/iOSonntag/vscode-bonsai/compare/v1.0.0...v1.0.1) (2026-09-07)
 
 
