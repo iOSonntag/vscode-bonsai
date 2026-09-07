@@ -10,6 +10,7 @@ const compositeCategories: readonly DefaultCategory[] = [
     patterns: [
       'category:manifests',
       'category:lockfiles',
+      'category:packageManager',
       'category:compiler',
       'category:lint',
       'category:format',

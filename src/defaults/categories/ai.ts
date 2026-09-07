@@ -11,6 +11,7 @@ export const aiCategory: DefaultCategory = {
     'CLAUDE.local.md',
     '.mcp.json',
     '.worktreeinclude',
+    '.ai',
     '**/.claude',
     '.cursorrules',
     '**/.cursor',

@@ -94,7 +94,7 @@ the whole subtree.
 | `bonsai.statusBar.enabled` | `true` | Show the active filter in the status bar. |
 | `bonsai.maxWalkEntries` | `50000` | The walk budget per workspace folder. |
 
-Built-in category ids: `manifests`, `lockfiles`, `dependencies`, `compiler`, `lint`, `format`,
+Built-in category ids: `manifests`, `lockfiles`, `packageManager`, `dependencies`, `compiler`, `lint`, `format`,
 `test`, `build`, `bundler`, `monorepo`, `ci`, `containers`, `env`, `versionManagers`, `git`,
 `gitHooks`, `editor`, `docs`, `legal`, `release`, `bots`, `output`, `cache`, `coverage`, `logs`,
 `osJunk`, `typings`, `storybook`, `migrations`, `apiSchema`, `ai`, plus the composites `config`

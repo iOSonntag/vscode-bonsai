@@ -12,5 +12,7 @@ export const monorepoCategory: DefaultCategory = {
     'pnpm-workspace.yaml',
     'workspace.json',
     'melos.yaml',
+    '.moon',
+    '**/moon.yml',
   ],
 };

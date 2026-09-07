@@ -1,6 +1,7 @@
 import { type DefaultCategory } from '../defaultDefinitions.js';
 import { manifestsCategory } from './manifests.js';
 import { lockfilesCategory } from './lockfiles.js';
+import { packageManagerCategory } from './packageManager.js';
 import { dependenciesCategory } from './dependencies.js';
 import { compilerCategory } from './compiler.js';
 import { lintCategory } from './lint.js';
@@ -34,6 +35,7 @@ import { aiCategory } from './ai.js';
 export const defaultCategories: readonly DefaultCategory[] = [
   manifestsCategory,
   lockfilesCategory,
+  packageManagerCategory,
   dependenciesCategory,
   compilerCategory,
   lintCategory,

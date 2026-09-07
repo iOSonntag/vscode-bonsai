@@ -2,6 +2,7 @@ import { type DefaultFilter } from './defaultDefinitions.js';
 
 const configurationCategoryIds = [
   'lockfiles',
+  'packageManager',
   'compiler',
   'lint',
   'format',
