@@ -16,5 +16,6 @@ export const cacheCategory: DefaultCategory = {
     '**/.gradle',
     '**/.dart_tool',
     '**/.terraform',
+    '**/.sst',
   ],
 };

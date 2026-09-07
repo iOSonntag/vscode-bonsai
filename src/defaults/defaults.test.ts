@@ -71,6 +71,31 @@ describe('the shipped defaults', () =>
     }
   });
 
+  it('hide test code only in the Coding excluding tests filter', () =>
+  {
+    const coding = resolveFilter(merge.catalog, 'coding');
+    const withoutTests = resolveFilter(merge.catalog, 'codingWithoutTests');
+    expect(coding.kind).toBe('resolved');
+    expect(withoutTests.kind).toBe('resolved');
+    if (coding.kind !== 'resolved' || withoutTests.kind !== 'resolved')
+    {
+      return;
+    }
+    expect(withoutTests.filter.base).toBe('showAll');
+    expect(withoutTests.filter.label).toBe('Coding excluding tests');
+    for (const pattern of coding.filter.hidePatterns)
+    {
+      expect(withoutTests.filter.hidePatterns).toContain(pattern);
+    }
+    for (const pattern of ['**/__tests__', '**/test', '**/*.test.*', '**/*.spec.*', '**/*_test.go'])
+    {
+      expect(coding.filter.hidePatterns).not.toContain(pattern);
+      expect(withoutTests.filter.hidePatterns).toContain(pattern);
+    }
+    expect(coding.filter.hidePatterns).toContain('**/.sst');
+    expect(defaultDefinitions.filters.map((filter) => filter.id)).toEqual(['coding', 'codingWithoutTests', 'setup', 'ai']);
+  });
+
   it('hide the items from the field report in the Coding filter', () =>
   {
     const resolution = resolveFilter(merge.catalog, 'coding');

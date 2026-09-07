@@ -236,6 +236,7 @@ Built-in filters:
 | --- | --- | --- | --- |
 | `all` | All | none | Implicit. No rules. |
 | `coding` | Coding | `showAll` | Hides every config category except package manifests, and hides outputs, caches, logs, dependency folders, and AI files. |
+| `codingWithoutTests` | Coding excluding tests | extends `coding` | Also hides the `testCode` category: test folders and test files. |
 | `setup` | Project setup | `hideAll` | Shows every config category, AI included. Hides outputs, caches, logs, and dependency folders last. |
 | `ai` | AI | `hideAll` | Shows the `ai` category. |
 

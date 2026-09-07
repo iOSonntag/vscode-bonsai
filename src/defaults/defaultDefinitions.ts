@@ -8,12 +8,13 @@ export interface DefaultCategory
   readonly patterns: readonly string[];
 }
 
-/** A shipped filter. Lists hold globs and category references. */
+/** A shipped filter. Lists hold globs and category references. A filter that extends another may omit the base mode. */
 export interface DefaultFilter
 {
   readonly id: string;
   readonly label: string;
-  readonly base: FilterBaseMode;
+  readonly base?: FilterBaseMode;
+  readonly extends?: string;
   readonly hide: readonly string[];
   readonly show: readonly string[];
 }

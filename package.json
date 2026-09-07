@@ -67,6 +67,11 @@
         "category": "Bonsai"
       },
       {
+        "command": "bonsai.filter.codingWithoutTests",
+        "title": "Coding Excluding Tests Filter",
+        "category": "Bonsai"
+      },
+      {
         "command": "bonsai.filter.setup",
         "title": "Project Setup Filter",
         "category": "Bonsai"

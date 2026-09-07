@@ -7,5 +7,6 @@ export const typingsCategory: DefaultCategory = {
     '**/dist/**/*.d.ts',
     '**/build/**/*.d.ts',
     '**/lib/**/*.d.ts',
+    '**/sst-env.d.ts',
   ],
 };

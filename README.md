@@ -7,6 +7,7 @@ between views of the same project:
 | --- | --- |
 | All | Everything. Bonsai removes every key it generated. |
 | Coding | Source code and package manifests. Config files, docs, outputs, caches, logs, and AI files are hidden. |
+| Coding excluding tests | The same as Coding, and test folders and test files are hidden too: `__tests__`, `test`, `e2e`, `*.test.*`, `*.spec.*`, and their peers in other languages. |
 | Project setup | Only the scaffolding: manifests, lockfiles, compiler, lint, format, test, build, CI, containers, env, Git and editor metadata, docs, release tooling, bots, and AI files. |
 | AI | Only the files that AI coding tools read or write, for 22 tools from Claude Code to Copilot. |
 
@@ -21,8 +22,9 @@ built-in Explorer offers. It writes its own keys next to yours and never touches
 
 - Click the filter icon in the Explorer title bar, or the filter name in the status bar. Both open
   the filter picker.
-- Or run a command: `Bonsai: Coding Filter`, `Bonsai: Project Setup Filter`, `Bonsai: AI Filter`,
-  `Bonsai: Show All`, `Bonsai: Cycle Filter`, `Bonsai: Select Filter`.
+- Or run a command: `Bonsai: Coding Filter`, `Bonsai: Coding Excluding Tests Filter`,
+  `Bonsai: Project Setup Filter`, `Bonsai: AI Filter`, `Bonsai: Show All`, `Bonsai: Cycle Filter`,
+  `Bonsai: Select Filter`.
 - Bind keys to those commands as you like. Bonsai ships no default keybindings.
 
 Hidden files are hidden from Quick Open and search too, because that is how `files.exclude` works.
@@ -95,7 +97,7 @@ the whole subtree.
 | `bonsai.maxWalkEntries` | `50000` | The walk budget per workspace folder. |
 
 Built-in category ids: `manifests`, `lockfiles`, `packageManager`, `dependencies`, `compiler`, `lint`, `format`,
-`test`, `build`, `bundler`, `monorepo`, `ci`, `containers`, `env`, `versionManagers`, `git`,
+`test`, `testCode`, `build`, `bundler`, `monorepo`, `ci`, `containers`, `env`, `versionManagers`, `git`,
 `gitHooks`, `editor`, `docs`, `legal`, `release`, `bots`, `output`, `cache`, `coverage`, `logs`,
 `osJunk`, `typings`, `storybook`, `migrations`, `apiSchema`, `ai`, plus the composites `config`
 and `generated`.

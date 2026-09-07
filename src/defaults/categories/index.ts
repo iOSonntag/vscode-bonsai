@@ -7,6 +7,7 @@ import { compilerCategory } from './compiler.js';
 import { lintCategory } from './lint.js';
 import { formatCategory } from './format.js';
 import { testCategory } from './test.js';
+import { testCodeCategory } from './testCode.js';
 import { buildCategory } from './build.js';
 import { bundlerCategory } from './bundler.js';
 import { monorepoCategory } from './monorepo.js';
@@ -41,6 +42,7 @@ export const defaultCategories: readonly DefaultCategory[] = [
   lintCategory,
   formatCategory,
   testCategory,
+  testCodeCategory,
   buildCategory,
   bundlerCategory,
   monorepoCategory,

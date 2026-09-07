@@ -50,10 +50,11 @@ export function mergeCatalogLayers(
     filters.set(filter.id, {
       id: filter.id,
       label: filter.label,
-      base: filter.base,
       enabled: true,
       hide: parseEntryList(hideTexts, 'defaults', `bonsai.filters.${filter.id}.hide`, problems),
       show: parseEntryList(filter.show, 'defaults', `bonsai.filters.${filter.id}.show`, problems),
+      ...(filter.base === undefined ? {} : { base: filter.base }),
+      ...(filter.extends === undefined ? {} : { extends: filter.extends }),
     });
   }
   let leafFolderEntries = parseGlobOnlyList(defaults.leafFolders, 'defaults', 'bonsai.leafFolders', problems);

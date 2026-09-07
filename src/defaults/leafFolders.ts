@@ -32,6 +32,7 @@ export const defaultLeafFolders: readonly string[] = [
   '.elixir_ls',
   '.bundle',
   '.terraform',
+  '.sst',
   'dist',
   'build',
   'out',

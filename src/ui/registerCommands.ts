@@ -24,6 +24,7 @@ export function registerBonsaiCommands(dependencies: CommandDependencies): Dispo
     commands.registerCommand(commandIds.applyFilter, applyFilterById),
     commands.registerCommand(commandIds.applyAllFilter, () => session.applyFilter(allFilterId)),
     commands.registerCommand(commandIds.applyCodingFilter, () => session.applyFilter('coding')),
+    commands.registerCommand(commandIds.applyCodingWithoutTestsFilter, () => session.applyFilter('codingWithoutTests')),
     commands.registerCommand(commandIds.applySetupFilter, () => session.applyFilter('setup')),
     commands.registerCommand(commandIds.applyAiFilter, () => session.applyFilter('ai')),
     commands.registerCommand(commandIds.refresh, () => session.refresh()),

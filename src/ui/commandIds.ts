@@ -4,6 +4,7 @@ export const commandIds = {
   applyFilter: 'bonsai.applyFilter',
   applyAllFilter: 'bonsai.filter.all',
   applyCodingFilter: 'bonsai.filter.coding',
+  applyCodingWithoutTestsFilter: 'bonsai.filter.codingWithoutTests',
   applySetupFilter: 'bonsai.filter.setup',
   applyAiFilter: 'bonsai.filter.ai',
   refresh: 'bonsai.refresh',

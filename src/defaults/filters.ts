@@ -44,6 +44,14 @@ export const codingFilter: DefaultFilter = {
   show: [],
 };
 
+export const codingWithoutTestsFilter: DefaultFilter = {
+  id: 'codingWithoutTests',
+  label: 'Coding excluding tests',
+  extends: 'coding',
+  hide: ['category:testCode'],
+  show: [],
+};
+
 export const setupFilter: DefaultFilter = {
   id: 'setup',
   label: 'Project setup',
@@ -65,7 +73,7 @@ export const aiFilter: DefaultFilter = {
   show: ['category:ai'],
 };
 
-export const defaultFilters: readonly DefaultFilter[] = [codingFilter, setupFilter, aiFilter];
+export const defaultFilters: readonly DefaultFilter[] = [codingFilter, codingWithoutTestsFilter, setupFilter, aiFilter];
 
 /** The category reference that the `bonsai.coding.hidePackageManifests` switch adds to the Coding filter. */
 export const packageManifestsCategoryReference = 'category:manifests';
