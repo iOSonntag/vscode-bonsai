@@ -1,4 +1,5 @@
 import { window, type ExtensionContext } from 'vscode';
+import * as z from 'zod/mini';
 import { BonsaiConfigurationService } from './configuration/bonsaiConfigurationService.js';
 import { ExcludeSettingWriter } from './explorer/excludeSettingWriter.js';
 import { FilterSession } from './explorer/filterSession.js';
@@ -22,7 +23,7 @@ export async function activate(context: ExtensionContext): Promise<void>
     configurationService,
     session,
     gitIntegration,
-    new StatusBarController(session, configurationService),
+    new StatusBarController(session, configurationService, readExtensionVersion(context)),
     session.onDidChangeState((state) =>
     {
       void publishContextKeys(state);
@@ -33,5 +34,14 @@ export async function activate(context: ExtensionContext): Promise<void>
   await publishContextKeys(session.getState());
   gitIntegration.start();
   await session.start();
-  log.info('Bonsai is active.');
+  log.info(`Bonsai ${readExtensionVersion(context)} is active.`);
+}
+
+const manifestSchema = z.object({ version: z.string() });
+
+function readExtensionVersion(context: ExtensionContext): string
+{
+  const manifest: unknown = context.extension.packageJSON;
+  const parsed = manifestSchema.safeParse(manifest);
+  return parsed.success ? parsed.data.version : 'unknown version';
 }

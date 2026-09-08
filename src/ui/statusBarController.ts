@@ -14,6 +14,7 @@ export class StatusBarController implements Disposable
   public constructor(
     private readonly session: FilterSession,
     private readonly configurationService: BonsaiConfigurationService,
+    private readonly extensionVersion: string,
   )
   {
     this.item = window.createStatusBarItem('bonsai.activeFilter', StatusBarAlignment.Left, statusBarPriority);
@@ -52,7 +53,7 @@ export class StatusBarController implements Disposable
     const icon = state.isBusy ? '$(sync~spin)' : state.problems.length > 0 || state.isPartial ? '$(warning)' : '$(filter)';
     this.item.text = `${icon} ${state.activeFilterLabel}`;
     const tooltip = new MarkdownString();
-    tooltip.appendMarkdown(`**Bonsai filter:** ${state.activeFilterLabel}\n\n`);
+    tooltip.appendMarkdown(`**Bonsai ${this.extensionVersion}:** ${state.activeFilterLabel}\n\n`);
     if (state.isPartial)
     {
       tooltip.appendMarkdown('The walk reached the entry budget. The filter is partial.\n\n');
