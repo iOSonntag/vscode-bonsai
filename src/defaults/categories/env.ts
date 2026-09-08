@@ -5,6 +5,7 @@ export const envCategory: DefaultCategory = {
   label: 'Environment files',
   patterns: [
     '**/.env',
+    '**/.env.*',
     '**/.env.local',
     '**/.env.*.local',
     '**/.env.example',

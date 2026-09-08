@@ -105,7 +105,18 @@ describe('the shipped defaults', () =>
       return;
     }
     const hidePatterns = resolution.filter.hidePatterns;
-    for (const expected of ['.ai', '**/.oxlintrc.json', '**/commitlint.config.*', '**/dprint.json', '**/knip.json'])
+    const expectedPatterns = [
+      '.ai',
+      '**/.oxlintrc.json',
+      '**/commitlint.config.*',
+      '**/dprint.json',
+      '**/knip.json',
+      '**/.env.*',
+      '**/.vitest',
+      '.trivyignore.yaml',
+      'components.json',
+    ];
+    for (const expected of expectedPatterns)
     {
       expect(hidePatterns, expected).toContain(expected);
     }

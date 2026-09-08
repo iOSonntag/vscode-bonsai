@@ -19,5 +19,6 @@ export const buildCategory: DefaultCategory = {
     'MODULE.bazel',
     '.bazelrc',
     '**/BUILD.bazel',
+    'components.json',
   ],
 };

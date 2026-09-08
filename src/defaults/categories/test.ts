@@ -6,6 +6,7 @@ export const testCategory: DefaultCategory = {
   patterns: [
     '**/jest.config.*',
     '**/vitest.config.*',
+    '**/.vitest',
     '**/karma.conf.js',
     '**/cypress.config.*',
     '**/playwright.config.*',
