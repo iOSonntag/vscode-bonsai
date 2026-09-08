@@ -6,6 +6,7 @@ export const logsCategory: DefaultCategory = {
   patterns: [
     'logs',
     'log',
+    'storage/logs',
     '**/*.log',
     '**/npm-debug.log*',
     '**/yarn-error.log',

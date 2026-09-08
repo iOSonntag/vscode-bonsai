@@ -7,6 +7,7 @@ export const formatCategory: DefaultCategory = {
     '**/.prettierrc*',
     '**/prettier.config.*',
     '**/.prettierignore',
+    '**/pint.json',
     '**/dprint.json',
     '**/dprint.jsonc',
     '**/.dprint.json',

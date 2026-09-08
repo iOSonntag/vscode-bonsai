@@ -17,5 +17,9 @@ export const cacheCategory: DefaultCategory = {
     '**/.dart_tool',
     '**/.terraform',
     '**/.sst',
+    'bootstrap/cache',
+    'storage/framework',
+    '**/.phpunit.cache',
+    '**/.phpunit.result.cache',
   ],
 };

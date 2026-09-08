@@ -12,6 +12,7 @@ export const aiCategory: DefaultCategory = {
     '.mcp.json',
     '.worktreeinclude',
     '.ai',
+    'boost.json',
     '**/.claude',
     '.cursorrules',
     '**/.cursor',

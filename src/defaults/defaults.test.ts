@@ -115,6 +115,12 @@ describe('the shipped defaults', () =>
       '**/.vitest',
       '.trivyignore.yaml',
       'components.json',
+      '**/compose.*.yaml',
+      '**/phpstan.neon',
+      '**/pint.json',
+      'boost.json',
+      'artisan',
+      'storage/framework',
     ];
     for (const expected of expectedPatterns)
     {
