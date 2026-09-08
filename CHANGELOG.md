@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/iOSonntag/vscode-bonsai/compare/v1.1.0...v1.1.1) (2026-09-08)
+
+
+### Bug Fixes
+
+* hide every .env variant, the .vitest folder, security scanner ignores, and the shadcn config in Coding ([c154df4](https://github.com/iOSonntag/vscode-bonsai/commit/c154df4b06f131717bd516c2b535a84206fde50b))
+
 ## [1.1.0](https://github.com/iOSonntag/vscode-bonsai/compare/v1.0.1...v1.1.0) (2026-09-07)
 
 
