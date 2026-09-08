@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.2](https://github.com/iOSonntag/vscode-bonsai/compare/v1.1.1...v1.1.2) (2026-09-08)
+
+
+### Bug Fixes
+
+* hide Compose variants, PHP analysis and formatter configs, Laravel Boost, and Laravel cache folders in Coding ([7dd707e](https://github.com/iOSonntag/vscode-bonsai/commit/7dd707e2d18b6d1325d40429770efb8781903a67))
+
 ## [1.1.1](https://github.com/iOSonntag/vscode-bonsai/compare/v1.1.0...v1.1.1) (2026-09-08)
 
 
