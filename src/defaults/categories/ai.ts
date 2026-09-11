@@ -8,6 +8,7 @@ export const aiCategory: DefaultCategory = {
     '**/AGENT.md',
     '**/CLAUDE.md',
     '**/GEMINI.md',
+    '**/CONTEXT.md',
     'CLAUDE.local.md',
     '.mcp.json',
     '.worktreeinclude',

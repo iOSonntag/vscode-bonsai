@@ -121,6 +121,7 @@ describe('the shipped defaults', () =>
       'boost.json',
       'artisan',
       'storage/framework',
+      '**/CONTEXT.md',
     ];
     for (const expected of expectedPatterns)
     {
