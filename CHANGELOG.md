@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.3](https://github.com/iOSonntag/vscode-bonsai/compare/v1.1.2...v1.1.3) (2026-09-11)
+
+
+### Bug Fixes
+
+* show CONTEXT.md in AI ([9a3e5f4](https://github.com/iOSonntag/vscode-bonsai/commit/9a3e5f4ce20de0cad4ff474ee396f7d4024cf1e6))
+
 ## [1.1.2](https://github.com/iOSonntag/vscode-bonsai/compare/v1.1.1...v1.1.2) (2026-09-08)
 
 
