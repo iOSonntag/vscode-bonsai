@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.1.4](https://github.com/iOSonntag/vscode-bonsai/compare/v1.1.3...v1.1.4) (2026-10-07)
+
+
+### Bug Fixes
+
+* never walk into a nested checkout ([dd91771](https://github.com/iOSonntag/vscode-bonsai/commit/dd9177169f137b4eb4e419b0f2756ff592a60e32))
+* never walk into a nested checkout ([7533da8](https://github.com/iOSonntag/vscode-bonsai/commit/7533da8d41dbbc39f48e6a95b836269c9daf51b6))
+* report a leaf folder entry that holds a path ([29feb65](https://github.com/iOSonntag/vscode-bonsai/commit/29feb65758ee0e170df28150b3daafdafcc9665d))
+
 ## [1.1.3](https://github.com/iOSonntag/vscode-bonsai/compare/v1.1.2...v1.1.3) (2026-09-11)
 
 
