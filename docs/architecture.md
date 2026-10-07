@@ -107,7 +107,9 @@ reader interface, and the tests use an in-memory tree.
 
 1. Leaf folders are never opened. The engine decides a leaf folder as a whole. Show rules do not
    apply inside a leaf folder. Residual hide globs still apply inside it. The list is the setting
-   `bonsai.leafFolders`. Each item is a glob that matches the folder name at any depth.
+   `bonsai.leafFolders`. Each item is a glob that matches the folder name at any depth. An item
+   with more than one path segment, such as `.claude/worktrees`, is reported as a problem and
+   ignored, because the walk tests one folder name at a time.
 2. Nested checkouts are never opened. A folder below the workspace folder root whose listing holds
    an entry named `.git` of any kind is a checkout of its own: a file for a Git worktree or a
    submodule, a folder for a nested repository. It is another project, so the engine decides it
