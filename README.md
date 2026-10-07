@@ -106,7 +106,7 @@ and `generated`.
 
 The Explorer evaluates glob keys itself, one folder listing at a time, so a glob costs nothing.
 Bonsai walks the tree only where a show rule and a hide rule can both match, and it never opens a
-leaf folder such as `node_modules`. It caches the last result, so a filter applies at once on start.
+leaf folder such as `node_modules` or a nested checkout, such as a Git worktree or a submodule. It caches the last result, so a filter applies at once on start.
 The output channel `Bonsai` logs every plan with the number of entries it read.
 
 ## Development

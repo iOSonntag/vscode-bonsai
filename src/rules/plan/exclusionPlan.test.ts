@@ -167,6 +167,75 @@ describe('computeExclusionPlan in hideAll mode', () =>
   });
 });
 
+describe('computeExclusionPlan at nested checkouts', () =>
+{
+  it('never opens a visible checkout below the root and applies residual hide globs inside it', async () =>
+  {
+    const request = buildRequest({
+      base: 'showAll',
+      hide: ['**/*.log'],
+      show: ['**/keep.log'],
+      baseline: ['**/.git'],
+      tree: [
+        '.git/HEAD',
+        'wt/.git',
+        'wt/keep.log',
+        'wt/src/a.log',
+        'repo/.git/HEAD',
+        'repo/b.log',
+        'src/keep.log',
+        'src/other.log',
+      ],
+    });
+    const plan = await computeExclusionPlan(request);
+    expect(plan.globEntries).toEqual(['repo/**/*.log', 'wt/**/*.log']);
+    expect(plan.concreteEntries).toEqual(['src/other.log']);
+    expect(plan.checkoutFolders).toEqual(['repo', 'wt']);
+    expect([...request.readPaths].sort()).toEqual(['', 'repo', 'src', 'wt']);
+  });
+
+  it('hides a checkout below the root as one entry, whatever its .git entry is', async () =>
+  {
+    const request = buildRequest({
+      base: 'hideAll',
+      show: ['**/CLAUDE.md'],
+      baseline: ['**/.git'],
+      tree: [
+        'CLAUDE.md',
+        '.git/HEAD',
+        'wt/.git',
+        'wt/CLAUDE.md',
+        'repo/.git/HEAD',
+        'repo/CLAUDE.md',
+        'linked/.git@',
+        'linked/CLAUDE.md',
+        'src/CLAUDE.md',
+        'src/a.ts',
+      ],
+    });
+    const plan = await computeExclusionPlan(request);
+    expect(plan.globEntries).toEqual([]);
+    expect(plan.concreteEntries).toEqual(['linked', 'repo', 'src/a.ts', 'wt']);
+    expect(plan.checkoutFolders).toEqual(['linked', 'repo', 'wt']);
+    expect([...request.readPaths].sort()).toEqual(['', 'linked', 'repo', 'src', 'wt']);
+  });
+
+  it('counts the listing of a checkout against the budget', async () =>
+  {
+    const request = buildRequest({
+      base: 'hideAll',
+      show: ['**/CLAUDE.md'],
+      tree: ['checkout/.git', 'checkout/a', 'checkout/b', 'checkout/c', 'zone/inner/CLAUDE.md'],
+      maxEntries: 5,
+    });
+    const plan = await computeExclusionPlan(request);
+    expect(plan.entriesRead).toBe(7);
+    expect(plan.isPartial).toBe(true);
+    expect(plan.concreteEntries).toEqual(['checkout', 'zone']);
+    expect(request.readPaths).not.toContain('zone/inner');
+  });
+});
+
 describe('computeExclusionPlan limits', () =>
 {
   it('treats unopened folders as leaf folders when the budget is reached', async () =>

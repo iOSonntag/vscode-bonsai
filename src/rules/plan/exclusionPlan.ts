@@ -42,6 +42,8 @@ export interface ExclusionPlan
   readonly entriesRead: number;
   /** True when the walk hit the entry budget. Unopened folders are treated as leaf folders. */
   readonly isPartial: boolean;
+  /** Unescaped paths of the folders below the root that the walk treated as leaf folders because each is a checkout. */
+  readonly checkoutFolders: readonly string[];
 }
 
 export class WalkCancelledError extends Error
@@ -55,7 +57,8 @@ export class WalkCancelledError extends Error
 
 /**
  * Computes the generated keys for a filter. Only conflict folders are opened. Leaf folders
- * are decided as a whole. Throws `WalkCancelledError` when the cancellation signal fires.
+ * and nested checkouts are decided as a whole. Throws `WalkCancelledError` when the
+ * cancellation signal fires.
  */
 export async function computeExclusionPlan(request: ExclusionPlanRequest): Promise<ExclusionPlan>
 {
@@ -66,6 +69,7 @@ export async function computeExclusionPlan(request: ExclusionPlanRequest): Promi
     concreteEntries: sortUnique(subtree.concreteEntries),
     entriesRead: walker.entriesRead,
     isPartial: walker.isPartial,
+    checkoutFolders: sortUnique(walker.checkoutFolders),
   };
 }
 
@@ -83,11 +87,13 @@ interface SubtreePlan
 }
 
 const emptySubtree: SubtreePlan = { visibleChildCount: 0, globEntries: [], concreteEntries: [] };
+const checkoutMarkerName = '.git';
 
 class PlanWalker
 {
   public entriesRead = 0;
   public isPartial = false;
+  public readonly checkoutFolders: string[] = [];
 
   private readonly baseMode: FilterBaseMode;
   private readonly initialStates: RuleStates;
@@ -147,6 +153,11 @@ class PlanWalker
   private async visitVisibleFolder(folderPath: string, states: RuleStates): Promise<SubtreePlan>
   {
     const children = await this.readChildren(folderPath);
+    if (folderPath.length > 0 && isCheckoutListing(children))
+    {
+      this.checkoutFolders.push(folderPath);
+      return { ...emptySubtree, globEntries: collectResidualGlobs(states.hide, folderPath) };
+    }
     const pendingSubtrees: Promise<SubtreePlan>[] = [];
     const concreteEntries: string[] = [];
     const globEntries: string[] = [];
@@ -195,6 +206,11 @@ class PlanWalker
   private async visitHiddenFolder(folderPath: string, states: RuleStates): Promise<SubtreePlan>
   {
     const children = await this.readChildren(folderPath);
+    if (folderPath.length > 0 && isCheckoutListing(children))
+    {
+      this.checkoutFolders.push(folderPath);
+      return { ...emptySubtree, concreteEntries: [escapeGlobPath(folderPath)] };
+    }
     const pendingSubtrees: Promise<SubtreePlan>[] = [];
     const concreteEntries: string[] = [];
     let visibleChildCount = 0;
@@ -258,6 +274,12 @@ class PlanWalker
     this.entriesRead += children.length;
     return children;
   }
+}
+
+/** True when a folder listing holds an entry named `.git` of any kind: a worktree, a submodule, or a repository. */
+function isCheckoutListing(children: readonly DirectoryEntry[]): boolean
+{
+  return children.some((child) => child.name === checkoutMarkerName);
 }
 
 function collapseWhenNothingVisible(subtree: SubtreePlan, folderPath: string): SubtreePlan
