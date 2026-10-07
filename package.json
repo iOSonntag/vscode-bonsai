@@ -212,7 +212,7 @@
           },
           "default": [],
           "scope": "resource",
-          "markdownDescription": "Folder name globs that the walk never opens, for example `node_modules` or `bazel-*`. Entries add to the built-in list. Use `!name` to remove a built-in entry."
+          "markdownDescription": "Folder name globs that the walk never opens, for example `node_modules` or `bazel-*`. Each entry is a folder name, not a path. Entries add to the built-in list. Use `!name` to remove a built-in entry."
         },
         "bonsai.coding.hidePackageManifests": {
           "type": "boolean",

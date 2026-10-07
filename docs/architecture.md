@@ -107,14 +107,23 @@ reader interface, and the tests use an in-memory tree.
 
 1. Leaf folders are never opened. The engine decides a leaf folder as a whole. Show rules do not
    apply inside a leaf folder. Residual hide globs still apply inside it. The list is the setting
-   `bonsai.leafFolders`. Each item is a glob that matches the folder name at any depth.
-2. Children that the baseline exclude setting already hides are skipped. The baseline is the
+   `bonsai.leafFolders`. Each item is a glob that matches the folder name at any depth. An item
+   with more than one path segment, such as `.claude/worktrees`, is reported as a problem and
+   ignored, because the walk tests one folder name at a time.
+2. Nested checkouts are never opened. A folder below the workspace folder root whose listing holds
+   an entry named `.git` of any kind is a checkout of its own: a file for a Git worktree or a
+   submodule, a folder for a nested repository. It is another project, so the engine decides it
+   as a leaf folder once it read the listing, which counts against the budget. The root is a
+   checkout too and is opened. Without this bound the agent worktrees under `.claude/worktrees/`,
+   each a full checkout with its own `node_modules`, cost about a hundred generated keys each,
+   rewritten on every change inside them.
+3. Children that the baseline exclude setting already hides are skipped. The baseline is the
    effective exclude setting minus the generated keys.
-3. Default patterns anchor at the root when the convention is root-only. `.github` reaches one
+4. Default patterns anchor at the root when the convention is root-only. `.github` reaches one
    folder. `**/.github` reaches every folder.
-4. A budget stops the walk. The setting `bonsai.maxWalkEntries` holds the limit. When the walk
+5. A budget stops the walk. The setting `bonsai.maxWalkEntries` holds the limit. When the walk
    hits the limit, Bonsai applies the partial plan and shows a warning once.
-5. Symbolic links are never followed.
+6. Symbolic links are never followed.
 
 A concrete entry is a path, but VS Code reads every key as a glob. The engine therefore escapes
 `[`, `]`, `*`, `?`, `{`, and `}` in every path segment as a single-character class, for example
@@ -137,10 +146,13 @@ not offer reach or residual analysis, and a second dialect would be a second sou
 ### 4.4 Runtime behavior
 
 - A filter change, a configuration change, a workspace folder change, or a file event triggers a
-  recompute. File events are debounced. Events below a leaf folder are dropped before the debounce.
+  recompute. File events are debounced. Events below a leaf folder, and below a nested checkout
+  that the last plan found, are dropped before the debounce. An event that creates a checkout in a
+  folder that is none still triggers the recompute that finds it.
 - A new trigger cancels a walk in progress.
 - Bonsai caches the last plan per workspace folder and filter. On start it applies the cached plan
-  at once and recomputes in the background.
+  at once and recomputes in the background. The cached plan carries its nested checkouts, so
+  file events inside them do not restart that first walk.
 - The desktop directory reader uses Node's `readdir` with file types. That avoids a stat call per
   entry. A `workspace.fs` reader exists for other URI schemes.
 - Multi-root workspaces get one plan and one write target per workspace folder. Every entry is

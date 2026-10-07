@@ -11,7 +11,7 @@ import {
 import { type BonsaiConfigurationService, type ResolvedConfiguration } from '../configuration/bonsaiConfigurationService.js';
 import { allFilterId, type ResolvedFilter } from '../rules/catalog/filterCatalog.js';
 import { resolveFilter } from '../rules/catalog/resolveFilter.js';
-import { splitRelativePath } from '../rules/paths/relativePath.js';
+import { isPathBelowFolder, splitRelativePath } from '../rules/paths/relativePath.js';
 import { computeExclusionPlan, WalkCancelledError } from '../rules/plan/exclusionPlan.js';
 import { createFolderNameMatcher, createRelativePathMatcher, type FolderNameMatcher } from '../rules/plan/pathMatchers.js';
 import { createDirectoryReaderForFolder } from './directoryReaders.js';
@@ -62,6 +62,7 @@ export class FilterSession implements Disposable
   private readonly expectedKeysByFolder = new Map<string, readonly string[]>();
   private readonly baselineSignatureByFolder = new Map<string, string>();
   private readonly leafFolderMatcherByFolder = new Map<string, FolderNameMatcher>();
+  private readonly checkoutFoldersByFolder = new Map<string, readonly string[]>();
   private readonly problemsByFolder = new Map<string, readonly string[]>();
   private readonly partialFolders = new Set<string>();
   private inFlightCount = 0;
@@ -231,6 +232,7 @@ export class FilterSession implements Disposable
     if (filterId === allFilterId)
     {
       this.partialFolders.delete(folderKey);
+      this.checkoutFoldersByFolder.delete(folderKey);
       this.problemsByFolder.set(folderKey, problems);
       await this.writeGeneratedKeys(folder, [], cancellation);
       return;
@@ -241,6 +243,7 @@ export class FilterSession implements Disposable
     if (resolution.kind === 'failed')
     {
       this.partialFolders.delete(folderKey);
+      this.checkoutFoldersByFolder.delete(folderKey);
       await this.writeGeneratedKeys(folder, [], cancellation);
       return;
     }
@@ -250,6 +253,7 @@ export class FilterSession implements Disposable
       const cachedPlan = this.stateStore.getCachedPlan(folder, filterId, signature);
       if (cachedPlan !== undefined)
       {
+        this.checkoutFoldersByFolder.set(folderKey, cachedPlan.checkoutFolders);
         await this.writeGeneratedKeys(folder, [...cachedPlan.globEntries, ...cachedPlan.concreteEntries], cancellation);
       }
     }
@@ -277,15 +281,18 @@ export class FilterSession implements Disposable
     {
       this.partialFolders.delete(folderKey);
     }
+    this.checkoutFoldersByFolder.set(folderKey, plan.checkoutFolders);
     this.log.info(
       `Plan for ${folder.name} with filter "${filterId}": ${plan.globEntries.length} glob entries, `
       + `${plan.concreteEntries.length} concrete entries, ${plan.entriesRead} entries read in ${Date.now() - startedAt} ms`
+      + `, ${plan.checkoutFolders.length} nested checkouts not opened`
       + `${plan.isPartial ? ', budget reached' : ''}.`,
     );
     await this.stateStore.setCachedPlan(folder, filterId, {
       signature,
       globEntries: plan.globEntries,
       concreteEntries: plan.concreteEntries,
+      checkoutFolders: plan.checkoutFolders,
     });
     await this.writeGeneratedKeys(folder, [...plan.globEntries, ...plan.concreteEntries], cancellation);
   }
@@ -354,6 +361,7 @@ export class FilterSession implements Disposable
     this.expectedKeysByFolder.delete(folderKey);
     this.baselineSignatureByFolder.delete(folderKey);
     this.leafFolderMatcherByFolder.delete(folderKey);
+    this.checkoutFoldersByFolder.delete(folderKey);
     this.problemsByFolder.delete(folderKey);
     this.partialFolders.delete(folderKey);
   }
@@ -377,9 +385,15 @@ export class FilterSession implements Disposable
       {
         return;
       }
-      const isLeafFolderName = this.leafFolderMatcherByFolder.get(folder.uri.toString());
+      const folderKey = folder.uri.toString();
+      const isLeafFolderName = this.leafFolderMatcherByFolder.get(folderKey);
       const segments = splitRelativePath(relativePath);
       if (isLeafFolderName !== undefined && segments.some((segment) => isLeafFolderName(segment)))
+      {
+        return;
+      }
+      const checkoutFolders = this.checkoutFoldersByFolder.get(folderKey) ?? [];
+      if (checkoutFolders.some((checkoutFolder) => isPathBelowFolder(relativePath, checkoutFolder)))
       {
         return;
       }

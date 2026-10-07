@@ -5,7 +5,8 @@ import {
   type FilterCatalog,
   type FilterDefinition,
 } from '../rules/catalog/filterCatalog.js';
-import { mergeRuleEntryLists, parseRuleEntry, type RuleEntry } from '../rules/entries/ruleEntry.js';
+import { formatRuleEntry, mergeRuleEntryLists, parseRuleEntry, type RuleEntry } from '../rules/entries/ruleEntry.js';
+import { isFolderNameGlob } from '../rules/plan/pathMatchers.js';
 import { type ConfigurationLayer, type ConfigurationProblem, type ConfigurationScopeName } from './configurationLayer.js';
 
 export interface CatalogMergeOptions
@@ -134,11 +135,19 @@ function parseGlobOnlyList(
   const entries = parseEntryList(texts, scope, path, problems);
   return entries.filter((entry, index) =>
   {
-    const isCategoryReference = entry.kind === 'categoryReference'
-      || (entry.kind === 'removal' && entry.target.kind === 'categoryReference');
-    if (isCategoryReference)
+    const target = entry.kind === 'removal' ? entry.target : entry;
+    if (target.kind === 'categoryReference')
     {
       problems.push({ scope, path: `${path}[${index}]`, message: 'A leaf folder entry cannot reference a category.' });
+      return false;
+    }
+    if (!isFolderNameGlob(target.pattern))
+    {
+      problems.push({
+        scope,
+        path: `${path}[${index}]`,
+        message: `A leaf folder entry takes a folder name, not a path: "${formatRuleEntry(entry)}".`,
+      });
       return false;
     }
     return true;

@@ -82,4 +82,23 @@ describe('mergeCatalogLayers', () =>
     expect(result.catalog.filters.get('coding')?.hide.map(formatRuleEntry)).toContain('ok');
     expect(result.leafFolders).toContain('fine');
   });
+
+  it('reports a leaf folder entry that holds a path and keeps the folder names', () =>
+  {
+    const layer = buildLayer('workspace', { leafFolders: ['.claude/worktrees', 'worktrees', '!**/dist'] });
+    const result = mergeCatalogLayers(defaults, [layer], { hidePackageManifests: false });
+    expect(result.problems).toEqual([
+      {
+        scope: 'workspace',
+        path: 'bonsai.leafFolders[0]',
+        message: 'A leaf folder entry takes a folder name, not a path: ".claude/worktrees".',
+      },
+      {
+        scope: 'workspace',
+        path: 'bonsai.leafFolders[2]',
+        message: 'A leaf folder entry takes a folder name, not a path: "!**/dist".',
+      },
+    ]);
+    expect(result.leafFolders).toEqual(['node_modules', 'dist', 'worktrees']);
+  });
 });

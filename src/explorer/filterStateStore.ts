@@ -8,6 +8,17 @@ export interface CachedPlan
   readonly signature: string;
   readonly globEntries: readonly string[];
   readonly concreteEntries: readonly string[];
+  /** The nested checkouts the walk did not open, so that file events below them are dropped before the walk ends. */
+  readonly checkoutFolders: readonly string[];
+}
+
+/** A cached plan as the workspace state holds it. A plan cached before checkout detection lacks checkout folders. */
+interface StoredCachedPlan
+{
+  readonly signature: string;
+  readonly globEntries: readonly string[];
+  readonly concreteEntries: readonly string[];
+  readonly checkoutFolders?: readonly string[];
 }
 
 /** The generated keys that Bonsai owns in one folder, and whether it created the exclude property itself. */
@@ -70,7 +81,16 @@ export class FilterStateStore
   public getCachedPlan(folder: WorkspaceFolder, filterId: string, signature: string): CachedPlan | undefined
   {
     const cachedPlan = this.readPlanCache()[planKeyFor(folder, filterId)];
-    return cachedPlan?.signature === signature ? cachedPlan : undefined;
+    if (cachedPlan?.signature !== signature)
+    {
+      return undefined;
+    }
+    return {
+      signature: cachedPlan.signature,
+      globEntries: cachedPlan.globEntries,
+      concreteEntries: cachedPlan.concreteEntries,
+      checkoutFolders: cachedPlan.checkoutFolders ?? [],
+    };
   }
 
   public async setCachedPlan(folder: WorkspaceFolder, filterId: string, plan: CachedPlan): Promise<void>
@@ -80,6 +100,7 @@ export class FilterStateStore
       signature: plan.signature,
       globEntries: [...plan.globEntries],
       concreteEntries: [...plan.concreteEntries],
+      checkoutFolders: [...plan.checkoutFolders],
     };
     await this.memento.update(planCacheKey, planCache);
   }
@@ -89,9 +110,9 @@ export class FilterStateStore
     return this.memento.get<Record<string, ManagedKeysRecord>>(managedKeysKey, {});
   }
 
-  private readPlanCache(): Record<string, CachedPlan>
+  private readPlanCache(): Record<string, StoredCachedPlan>
   {
-    return this.memento.get<Record<string, CachedPlan>>(planCacheKey, {});
+    return this.memento.get<Record<string, StoredCachedPlan>>(planCacheKey, {});
   }
 }
 

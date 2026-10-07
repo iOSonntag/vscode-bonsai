@@ -9,6 +9,18 @@ export function splitRelativePath(relativePath: string): string[]
   return normalizedPath.split('/').filter((segment) => segment.length > 0);
 }
 
+/** True when the path lies strictly below the folder. The folder itself is not below itself. */
+export function isPathBelowFolder(relativePath: string, folderPath: string): boolean
+{
+  const pathSegments = splitRelativePath(relativePath);
+  const folderSegments = splitRelativePath(folderPath);
+  if (pathSegments.length <= folderSegments.length)
+  {
+    return false;
+  }
+  return folderSegments.every((folderSegment, index) => pathSegments[index] === folderSegment);
+}
+
 /** Joins path segments with a forward slash. No segments yield the root path, the empty string. */
 export function joinPathSegments(segments: readonly string[]): string
 {
